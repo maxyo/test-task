@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  app:
+    image: ${CI_REGISTRY_IMAGE}:${REVISION}
+    build:
+      context: .
+    ports:
+      - '0.0.0.0:${PORT}:3000'
+    depends_on:
+      - db
+    env_file:
+      - .env.production
+  db:
+    volumes:
+      - /var/lib/${CI_PROJECT_TITLE}/postgresql:/var/lib/postgresql/data
+    ports:
+      - '127.0.0.1:64321:5432'

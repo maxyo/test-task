@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  db:
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+    ports:
+      - '127.0.0.1:64321:5432'
