@@ -14,5 +14,3 @@ services:
   db:
     volumes:
       - /var/lib/${CI_PROJECT_TITLE}/postgresql:/var/lib/postgresql/data
-    ports:
-      - '127.0.0.1:64321:5432'

@@ -1,2 +1,5 @@
 version: '3.7'
-services: {}
+services:
+  db:
+    ports:
+      - '127.0.0.1:64321:5432'
