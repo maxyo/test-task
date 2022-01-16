@@ -1,10 +1,11 @@
-import {Controller} from "@nestjs/common";
+import {Controller, UseGuards} from "@nestjs/common";
 import {Crud, CrudController} from "@nestjsx/crud";
 import {Product} from "../../entity/product.entity";
 import {ProductDto} from "./dto/product.dto";
 import {ApiOkResponse, OmitType} from "@nestjs/swagger";
-import {ProductProvider} from "../../provider/product.provider";
 import {getManyResponseDecorator} from "../../../../lib/utils/pagination.util";
+import {AuthGuard} from "@nestjs/passport";
+import {ProductProvider} from "../../service/product.provider";
 
 @Controller('/api/product')
 @Crud({
@@ -15,12 +16,38 @@ import {getManyResponseDecorator} from "../../../../lib/utils/pagination.util";
       field: 'id',
     },
   },
+  query: {
+    cache: 1000,
+    alwaysPaginate: true
+  },
   routes: {
+    exclude: [
+      'updateOneBase',
+      'recoverOneBase',
+      'createManyBase'
+    ],
     getManyBase: {
       decorators: [
         ApiOkResponse({ type: getManyResponseDecorator(Product) })
+      ],
+      interceptors: [
+      ],
+    },
+    createOneBase: {
+      decorators: [
+        UseGuards(AuthGuard())
       ]
-    }
+    },
+    deleteOneBase: {
+      decorators: [
+        UseGuards(AuthGuard())
+      ]
+    },
+    replaceOneBase: {
+      decorators: [
+        UseGuards(AuthGuard())
+      ]
+    },
   },
   dto: {
     create: OmitType(ProductDto, ['id']),

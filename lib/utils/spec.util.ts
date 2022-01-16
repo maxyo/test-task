@@ -2,6 +2,7 @@ import {Connection, EntityMetadata} from "typeorm";
 import {glob} from "glob";
 import {fsReadFile} from "ts-loader/dist/utils";
 import * as Path from "path";
+import {ConfigService} from "@nestjs/config";
 
 export async function  cleanAll(connection: Connection, entities: EntityMetadata[]) {
   try {
@@ -14,7 +15,7 @@ export async function  cleanAll(connection: Connection, entities: EntityMetadata
   }
 }
 
-export function loadFixtures(connection: Connection) {
+export function loadFixtures(connection: Connection, entities: EntityMetadata[]) {
   return new Promise<void>((resolve, reject) => {
     glob('test/fixtures/**/*.json', (e, matches ) => {
       if(e) {
@@ -24,6 +25,9 @@ export function loadFixtures(connection: Connection) {
           matches.map(fixture => {
             return new Promise((resolve1, reject1) => {
               const baseName = Path.basename(fixture, '.json');
+              if(!entities.find(entity => entity.name === baseName)) {
+                resolve();
+              }
               const data: any[] = JSON.parse(fsReadFile(fixture)) ;
               const repository = connection.getRepository(baseName);
               Promise.all(
@@ -43,3 +47,17 @@ export function loadFixtures(connection: Connection) {
 
 
 export const uuidRegex = /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/;
+
+
+export function customConfigFactory(config: Record<string, any>) {
+  return (configService: ConfigService) => {
+    return {
+      get: (key: string, defaultValue: any = undefined): any => {
+        if(config[key]) {
+          return config[key] || defaultValue;
+        }
+        return configService.get(key, defaultValue);
+      }
+    };
+  }
+}

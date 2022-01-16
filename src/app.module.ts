@@ -7,6 +7,7 @@ import {ProductModule} from "./product/product.module";
 import {TypeOrmModuleOptions} from "@nestjs/typeorm/dist/interfaces/typeorm-options.interface";
 import {UserModule} from "./user/user.module";
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,6 +23,7 @@ import {UserModule} from "./user/user.module";
         username: config.get<string>('DB_USER'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_DATABASE'),
+        prefix: config.get<string | null>('DB_PREFIX', null),
         synchronize: false,
         migrationsRun: true,
         migrationsTableName: `migrations`,
