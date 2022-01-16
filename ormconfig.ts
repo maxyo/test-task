@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import {getEnvFilesPath} from "./lib/utils/config.utils";
+import {getEnvFilesPath} from "./lib/utils/config.util";
 import {TypeOrmModuleOptions} from "@nestjs/typeorm/dist/interfaces/typeorm-options.interface";
 
 getEnvFilesPath().forEach(path => dotenv.config({path}));

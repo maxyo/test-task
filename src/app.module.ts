@@ -1,10 +1,11 @@
 import {Module} from '@nestjs/common';
 import {ConfigModule, ConfigService} from "@nestjs/config";
-import {getEnvFilesPath} from "../lib/utils/config.utils";
+import {getEnvFilesPath} from "../lib/utils/config.util";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {DatabaseType} from "typeorm/driver/types/DatabaseType";
 import {ProductModule} from "./product/product.module";
 import {TypeOrmModuleOptions} from "@nestjs/typeorm/dist/interfaces/typeorm-options.interface";
+import {UserModule} from "./user/user.module";
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import {TypeOrmModuleOptions} from "@nestjs/typeorm/dist/interfaces/typeorm-opti
       } as TypeOrmModuleOptions),
     }),
     ProductModule,
+    UserModule,
   ],
   exports: [],
   controllers: [],

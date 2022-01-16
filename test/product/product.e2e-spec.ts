@@ -3,7 +3,7 @@ import {INestApplication} from '@nestjs/common';
 import * as request from 'supertest';
 import {AppModule} from '../../src/app.module';
 import {Connection} from "typeorm";
-import {cleanAll, uuidRegex} from "../../lib/utils/spec.utils";
+import {cleanAll, loadFixtures, uuidRegex} from "../../lib/utils/spec.util";
 
 
 describe('ProductController (e2e)', () => {
@@ -18,6 +18,7 @@ describe('ProductController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     const connection = app.get<Connection>(Connection);
     await cleanAll(connection, connection.entityMetadatas);
+    await loadFixtures(connection);
 
     await app.init();
   });
